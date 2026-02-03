@@ -4,16 +4,10 @@ from pandas_datareader import data as pdr
 from datetime import datetime
 import os
 from dotenv import load_dotenv
-import smtplib
-from email.message import EmailMessage
 
 load_dotenv()
 FMP_API_KEY = os.getenv("FMP_API_KEY")
-print("FMP_API_KEY loaded:" , bool(FMP_API_KEY))
-EMAIL_USER = os.getenv("EMAIL_USER")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-EMAIL_DESTINY = os.getenv("EMAIL_DESTINY")
-print("EMAIL API KEYS LOADED: ", bool(EMAIL_USER) and bool(EMAIL_PASSWORD))
+print("FMP_API_KEY loaded:", bool(FMP_API_KEY))
 
 def test_stooq():
     print("\n=== TEST STOOQ (ACCIONES / ETF) ===")
@@ -43,6 +37,33 @@ def test_coingecko():
         print(len(data["prices"]))
     except Exception as e:
         print("X COINGECKO FALLÓ", e)
+
+
+def test_binance():
+    print("\n=== TEST BINANCE (CRIPTO) ===")
+    try:
+        url = "https://api.binance.com/api/v3/klines"
+        params = {
+            "symbol": "BTCUSDT",
+            "interval": "1d",
+            "limit": 10
+        }
+        r = requests.get(url, params=params, timeout=10)
+        r.raise_for_status()
+        data = r.json()
+        for k in data[:3]:
+            print({
+                "open_time": k[0],
+                "open": k[1],
+                "high": k[2],
+                "low": k[3],
+                "close": k[4],
+                "volume": k[5],
+            })
+        print("BINANCE OK ✅")
+        print(len(data))
+    except Exception as e:
+        print("BINANCE FALLÓ ❌", e)
 
 def test_fmp_key_metrics_stable():
     #print("\n=== TEST FMP KEY METRICS ===")
@@ -93,32 +114,10 @@ def ordenar_por_anio(data, columnas, titulo):
     print(f"\n{titulo}")
     print(df)
 
-def test_email():
-    print("\n=== TEST EMAIL (GMAIL SMTP) ===")    
-
-    if not EMAIL_PASSWORD or not EMAIL_DESTINY:
-        print("X EMAIL FALLÓ ❌ – Variables de entorno no cargadas")
-        return
-
-    try:
-        msg = EmailMessage()
-        msg["Subject"] = "Test desde GitHub Actions"
-        msg["From"] = EMAIL_USER
-        msg["To"] = EMAIL_DESTINY
-        msg.set_content("Correo enviado correctamente desde el pipeline 🚀")
-
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            smtp.login(EMAIL_USER, EMAIL_PASSWORD)
-            smtp.send_message(msg)
-
-        print("V EMAIL OK ✅")
-
-    except Exception as e:
-        print("X EMAIL FALLÓ ❌", e)
-
 if __name__ == "__main__":
     test_stooq()
     test_coingecko()
+    test_binance()
 
     key_metrics = test_fmp_key_metrics_stable()
     ratios = test_fmp_ratios_stable()
@@ -143,5 +142,3 @@ if __name__ == "__main__":
         ],
         titulo="=== RATIOS POR AÑO ==="
     )
-
-    test_email()
