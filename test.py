@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 FMP_API_KEY = os.getenv("FMP_API_KEY")
+print("FMP_API_KEY loaded:", bool(FMP_API_KEY))
 
 def test_stooq():
     print("\n=== TEST STOOQ (ACCIONES / ETF) ===")
@@ -99,6 +100,11 @@ def test_fmp_ratios_stable():
             print("BINANCE FALLÓ ❌", e)
 
 def ordenar_por_anio(data, columnas, titulo):
+
+    if not data or not isinstance(data, list):
+        print(f"X {titulo} – No data to process")
+        return
+
     df = pd.DataFrame(data)
 
     df["year"] = df["date"].str[:4].astype(int)
