@@ -1,0 +1,30 @@
+name: Run Financial Data Tests
+
+on:
+    # Allow manual execution
+    workflow_dispatch:
+    schedule:
+        # every day at 8 am UTC-5
+        - cron: "0 13 * * *"
+jobs:
+    run-tests:
+        runs-on: ubuntu-latest
+        steps: 
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python 3.11
+              uses: actions/setup-python@v5
+              with: 
+                python-version: "3.11"
+            
+            - name: Upgrade Pip
+              run: python -m pip install --upgrade pip
+
+            - name: Install dependencies
+              run: pip instal -r requeriments.txt
+
+            - name: Run Test.py
+              env:
+                FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+              run: python test.py
