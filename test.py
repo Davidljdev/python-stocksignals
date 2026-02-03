@@ -66,31 +66,37 @@ def test_binance():
 
 def test_fmp_key_metrics_stable():
     #print("\n=== TEST FMP KEY METRICS ===")
-    url = "https://financialmodelingprep.com/stable/key-metrics"
-    params = {
-        "symbol": "AAPL",
-        "period": "annual",
-        "apikey": FMP_API_KEY
-    }
-    r = requests.get(url, params=params, timeout=10)
-    r.raise_for_status()
-    #print(type(r.json()))
-    #print(r.json()[:1])
-    return r.json()
+    try: 
+        url = "https://financialmodelingprep.com/stable/key-metrics"
+        params = {
+            "symbol": "AAPL",
+            "period": "annual",
+            "apikey": FMP_API_KEY
+        }
+        r = requests.get(url, params=params, timeout=10)
+        r.raise_for_status()
+        #print(type(r.json()))
+        #print(r.json()[:1])
+        return r.json()
+    except Exception as e:
+        print("TEST FMP KEY METRICS FALLÓ ❌", e)
 
 def test_fmp_ratios_stable():
     #print("\n=== TEST FMP RATIOS ===")
-    url = "https://financialmodelingprep.com/stable/ratios"
-    params = {
-        "symbol": "AAPL",
-        "period": "annual",
-        "apikey": FMP_API_KEY
-    }
-    r = requests.get(url, params=params, timeout=10)
-    r.raise_for_status()
-    #print(type(r.json()))
-    #print(r.json()[:1])
-    return r.json()
+    try: 
+        url = "https://financialmodelingprep.com/stable/ratios"
+        params = {
+            "symbol": "AAPL",
+            "period": "annual",
+            "apikey": FMP_API_KEY
+        }
+        r = requests.get(url, params=params, timeout=10)
+        r.raise_for_status()
+        #print(type(r.json()))
+        #print(r.json()[:1])
+        return r.json()
+    except Exception as e:
+            print("BINANCE FALLÓ ❌", e)
 
 def ordenar_por_anio(data, columnas, titulo):
     df = pd.DataFrame(data)
