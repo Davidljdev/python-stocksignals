@@ -25,7 +25,7 @@ jobs:
               run: pip install -r requirements.txt
 
             - name: Run Test.py
-              run: python test.py
+              run: python main.py
               env:
                 FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
                 EMAIL_USER: ${{ secrets.EMAIL_USER }}

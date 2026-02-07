@@ -2,3 +2,5 @@ pandas==2.2.1
 requests==2.31.0
 pandas-datareader==0.10.0
 python-dotenv
+deep-translator
+beautifulsoup4
